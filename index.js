@@ -1,18 +1,16 @@
 const express = require('express');
 const app = express();
 
-// Dados em memória
+
 let tasks = [
   { id: 1, title: 'API Express', completed: false },
   { id: 2, title: 'Criar Lista de tarefas', completed: true }
 ];
 let nextId = 3;
 
-// Middleware para lidar com JSON e formulários
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Rota principal - Interface Web
 app.get('/', (req, res) => {
   let html = `
     <!DOCTYPE html>
@@ -80,7 +78,7 @@ app.get('/', (req, res) => {
         <div id="tasks">
   `;
 
-  // Lista de tarefas
+
   tasks.forEach(task => {
     html += `
       <div class="task-card card ${task.completed ? 'completed' : ''}">
@@ -114,7 +112,7 @@ app.get('/', (req, res) => {
   res.send(html);
 });
 
-// Adicionar nova tarefa
+
 app.post('/tasks', (req, res) => {
   const newTask = {
     id: nextId++,
@@ -125,14 +123,13 @@ app.post('/tasks', (req, res) => {
   res.redirect('/');
 });
 
-// Alternar status da tarefa
 app.get('/tasks/:id/toggle', (req, res) => {
   const task = tasks.find(t => t.id === parseInt(req.params.id));
   if (task) task.completed = !task.completed;
   res.redirect('/');
 });
 
-// Editar tarefa
+
 app.get('/tasks/:id/edit', (req, res) => {
   const task = tasks.find(t => t.id === parseInt(req.params.id));
   if (!task) return res.redirect('/');
@@ -173,13 +170,13 @@ app.post('/tasks/:id/update', (req, res) => {
   res.redirect('/');
 });
 
-// Excluir tarefa
+
 app.get('/tasks/:id/delete', (req, res) => {
   tasks = tasks.filter(t => t.id !== parseInt(req.params.id));
   res.redirect('/');
 });
 
-// Iniciar servidor
+
 const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`Aplicação rodando em http://localhost:${PORT}`);
